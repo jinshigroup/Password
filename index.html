@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>安全随机密码生成器 - 在线生成高强度密码</title>
+    <meta name="description" content="免费在线随机密码生成器，可自定义密码长度和字符类型，生成高强度安全密码，保护您的账户安全。支持大小写字母、数字和特殊符号。">
+    <meta name="keywords" content="密码生成器, 随机密码, 安全密码, 密码工具, 在线密码生成, 高强度密码">
+    <meta name="author" content="密码工具网">
+    <link rel="canonical" href="https://password.jinshi.group">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f7fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .generator-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .password-display {
+            display: flex;
+            margin-bottom: 2rem;
+        }
+
+        #passwordOutput {
+            flex: 1;
+            padding: 1rem;
+            font-size: 1.2rem;
+            border: 2px solid #ddd;
+            border-radius: 5px 0 0 5px;
+            outline: none;
+        }
+
+        .copy-btn {
+            padding: 1rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .copy-btn:hover {
+            background: #5a6fd8;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .setting-group label {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        #length {
+            width: 100%;
+        }
+
+        .checkboxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .checkboxes label {
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .generate-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .info-section {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .info-section h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+
+        .info-section h3 {
+            color: #764ba2;
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .info-section ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .info-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .password-display {
+                flex-direction: column;
+            }
+            
+            #passwordOutput {
+                border-radius: 5px;
+                margin-bottom: 0.5rem;
+            }
+            
+            .copy-btn {
+                border-radius: 5px;
+                padding: 0.8rem;
+            }
+            
+            .checkboxes {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>🔒 随机密码生成器</h1>
+            <p>快速生成安全可靠的随机密码，保护您的在线账户</p>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="generator-section">
+            <div class="password-display">
+                <input type="text" id="passwordOutput" readonly placeholder="点击生成按钮创建密码">
+                <button id="copyBtn" class="copy-btn">复制</button>
+            </div>
+            
+            <div class="controls">
+                <div class="setting-group">
+                    <label for="length">密码长度: <span id="lengthValue">12</span></label>
+                    <input type="range" id="length" min="4" max="50" value="12">
+                </div>
+                
+                <div class="setting-group checkboxes">
+                    <label>
+                        <input type="checkbox" id="includeUppercase" checked>
+                        包含大写字母 (A-Z)
+                    </label>
+                    <label>
+                        <input type="checkbox" id="includeLowercase" checked>
+                        包含小写字母 (a-z)
+                    </label>
+                    <label>
+                        <input type="checkbox" id="includeNumbers" checked>
+                        包含数字 (0-9)
+                    </label>
+                    <label>
+                        <input type="checkbox" id="includeSymbols" checked>
+                        包含符号 (!@#$...)
+                    </label>
+                </div>
+                
+                <button id="generateBtn" class="generate-btn">生成密码</button>
+            </div>
+        </section>
+        
+        <section class="info-section">
+            <h2>为什么需要强密码？</h2>
+            <p>在当今数字化时代，网络安全至关重要。使用弱密码或重复使用相同密码会大大增加账户被破解的风险。</p>
+            
+            <h3>强密码的特点：</h3>
+            <ul>
+                <li>长度至少12个字符</li>
+                <li>包含大小写字母、数字和特殊符号</li>
+                <li>避免使用个人信息（如生日、姓名）</li>
+                <li>每个账户使用不同的密码</li>
+            </ul>
+            
+            <h3>我们的密码生成器优势：</h3>
+            <ul>
+                <li>✅ 完全免费使用</li>
+                <li>✅ 客户端生成，密码不会传输到服务器</li>
+                <li>✅ 可自定义密码复杂度</li>
+                <li>✅ 即时生成，无需等待</li>
+                <li>✅ 适合各种用途（WiFi密码、账户密码等）</li>
+            </ul>
+        </section>
+    </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取DOM元素
+            const passwordOutput = document.getElementById('passwordOutput');
+            const lengthSlider = document.getElementById('length');
+            const lengthValue = document.getElementById('lengthValue');
+            const includeUppercase = document.getElementById('includeUppercase');
+            const includeLowercase = document.getElementById('includeLowercase');
+            const includeNumbers = document.getElementById('includeNumbers');
+            const includeSymbols = document.getElementById('includeSymbols');
+            const generateBtn = document.getElementById('generateBtn');
+            const copyBtn = document.getElementById('copyBtn');
+            
+            // 字符集
+            const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
+            const numberChars = '0123456789';
+            const symbolChars = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            
+            // 更新长度显示
+            lengthSlider.addEventListener('input', function() {
+                lengthValue.textContent = this.value;
+            });
+            
+            // 生成密码函数
+            function generatePassword() {
+                const length = parseInt(lengthSlider.value);
+                let charset = '';
+                let password = '';
+                
+                // 根据选项构建字符集
+                if (includeUppercase.checked) charset += uppercaseChars;
+                if (includeLowercase.checked) charset += lowercaseChars;
+                if (includeNumbers.checked) charset += numberChars;
+                if (includeSymbols.checked) charset += symbolChars;
+                
+                // 如果没有选择任何字符类型，提示用户
+                if (charset === '') {
+                    passwordOutput.value = '请选择至少一种字符类型';
+                    return;
+                }
+                
+                // 生成密码
+                for (let i = 0; i < length; i++) {
+                    const randomIndex = Math.floor(Math.random() * charset.length);
+                    password += charset[randomIndex];
+                }
+                
+                passwordOutput.value = password;
+            }
+            
+            // 复制密码到剪贴板
+            function copyPassword() {
+                if (!passwordOutput.value || passwordOutput.value.includes('请选择')) {
+                    return;
+                }
+                
+                passwordOutput.select();
+                document.execCommand('copy');
+                
+                // 显示复制成功提示
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = '已复制!';
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                }, 2000);
+            }
+            
+            // 绑定事件
+            generateBtn.addEventListener('click', generatePassword);
+            copyBtn.addEventListener('click', copyPassword);
+            
+            // 页面加载时生成初始密码
+            generatePassword();
+        });
+    </script>
+</body>
+</html>
